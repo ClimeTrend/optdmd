@@ -4,8 +4,8 @@ classdef SignalGenerator
     properties
         nx = 100; % Number of spatial points
         nt = 500; % Number of temporal points
-        x_min = 0; % Minimum spatial coordinate
-        x_max = 10; % Maximum spatial coordinate
+        x_min = -5; % Minimum spatial coordinate
+        x_max = 5; % Maximum spatial coordinate
         t_min = 0; % Minimum temporal coordinate
         t_max = 50; % Maximum temporal coordinate
         x % Spatial coordinate vector
