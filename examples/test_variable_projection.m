@@ -1,73 +1,85 @@
-%% generate synthetic data
+%% generate data if requested, otherwise load it
 
-% create the signal that we will feed to opt DMD
+generate_data = false;
 
-signal_generator = SignalGenerator;
+if generate_data
 
-% first sinusoid
+    % create the signal that we will feed to opt DMD
 
-a=2;
-k=1.5;
-omega=0.5;
-gamma=0;
+    signal_generator = SignalGenerator;
 
-signal_generator = add_sinusoid1( ...
-    signal_generator, a, k, omega, gamma ...
-    );
+    % first sinusoid
 
-figure
-contourf(signal_generator.T', ...
-    signal_generator.X', ...
-    signal_generator.components{1}.signal',...
-    LineStyle="none")
-title(["Sinusoid 1, Omega=" num2str(round(omega, 3)) ", Amp=" num2str(round(a, 3))])
+    a=2;
+    k=1.5;
+    omega=0.5;
+    gamma=0;
 
-% second sinusoid
+    signal_generator = add_sinusoid1( ...
+        signal_generator, a, k, omega, gamma ...
+        );
 
-a=3;
-c=1.5;
-omega=2.5;
-k=0.5;
+    figure
+    contourf(signal_generator.T', ...
+        signal_generator.X', ...
+        signal_generator.components{1}.signal',...
+        LineStyle="none")
+    title(["Sinusoid 1, Omega=" num2str(round(omega, 3)) ", Amp=" num2str(round(a, 3))])
 
-signal_generator = add_sinusoid2( ...
-    signal_generator, a, k, omega, c);
+    % second sinusoid
 
-figure
-contourf(signal_generator.T', ...
-    signal_generator.X', ...
-    signal_generator.components{2}.signal',...
-    LineStyle="none")
-title(["Sinusoid 2, Omega=" num2str(round(omega, 3)) ", Amp=" num2str(round(a, 3))])
+    a=3;
+    c=1.5;
+    omega=2.5;
+    k=0.5;
 
-% third sinusoid
+    signal_generator = add_sinusoid2( ...
+        signal_generator, a, k, omega, c);
 
-a=3;
-c=-1.5;
-k=0.5;
-omega=5;
+    figure
+    contourf(signal_generator.T', ...
+        signal_generator.X', ...
+        signal_generator.components{2}.signal',...
+        LineStyle="none")
+    title(["Sinusoid 2, Omega=" num2str(round(omega, 3)) ", Amp=" num2str(round(a, 3))])
 
-signal_generator = add_sinusoid2( ...
-    signal_generator, a, k, omega, c);
+    % third sinusoid
 
-figure
-contourf(signal_generator.T', ...
-    signal_generator.X', ...
-    signal_generator.components{3}.signal',...
-    LineStyle="none")
-title(["Sinusoid 3, Omega=" num2str(round(omega, 3)) ", Amp=" num2str(round(a, 3))])
+    a=3;
+    c=-1.5;
+    k=0.5;
+    omega=5;
+
+    signal_generator = add_sinusoid2( ...
+        signal_generator, a, k, omega, c);
+
+    figure
+    contourf(signal_generator.T', ...
+        signal_generator.X', ...
+        signal_generator.components{3}.signal',...
+        LineStyle="none")
+    title(["Sinusoid 3, Omega=" num2str(round(omega, 3)) ", Amp=" num2str(round(a, 3))])
 
 
-% add noise and plot the final result
+    % add noise and plot the final result
 
-signal_generator = add_noise( ...
-    signal_generator, 0.2, 42);
+    signal_generator = add_noise( ...
+        signal_generator, 0.2, 42);
 
-figure
-contourf(signal_generator.T', ...
-    signal_generator.X', ...
-    signal_generator.signal', ...
-    LineStyle="none")
-title("All + Noise")
+    figure
+    contourf(signal_generator.T', ...
+        signal_generator.X', ...
+        signal_generator.signal', ...
+        LineStyle="none")
+    title("All + Noise")
+
+else
+    disp("Loading data...")
+    data = load("../../toy_dataset/data/data.mat");
+    signal = data.signal;
+    t = data.t;
+    x = data.x;
+end
 
 %% apply time delay before performing opt DMD
 
@@ -84,8 +96,8 @@ function [X_delay, t_delay] = apply_time_delay(X, t)
 end
 
 [X_delay, t_delay] = apply_time_delay( ...
-    signal_generator.signal', ...
-    signal_generator.t);
+    signal', ...
+    t);
 
 %% perform opt DMD using Algorithm 3
 
@@ -107,7 +119,7 @@ disp(b')
 for i = 1:r/2
     j = i*2 - 1;
     figure()
-    plot(signal_generator.x, real(w(1:100, j)))
+    plot(x, real(w(1:100, j)))
     title(["Omega=" num2str(round(imag(e2(j)), 3)) ", Amp=" num2str(round(b(j), 3))])
 end
 
