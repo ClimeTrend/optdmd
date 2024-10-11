@@ -1,6 +1,7 @@
 %% generate data if requested, otherwise load it
 
-generate_data = false;
+generate_data = false;  % set to true to generate data, false to load it from file
+filename_load = "../../data/data.mat";  % file to load data from, if generate_data is false
 
 if generate_data
 
@@ -75,7 +76,7 @@ if generate_data
 
 else
     disp("Loading data...")
-    data = load("../../toy_dataset/data/data.mat");
+    data = load(filename_load);
     signal = data.signal;
     t = data.t;
     x = data.x;
