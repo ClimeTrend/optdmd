@@ -10,4 +10,5 @@
 
 addpath('./src');
 addpath('./examples');
+addpath('./')
 
