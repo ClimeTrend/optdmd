@@ -1,3 +1,5 @@
+% A script to test optimized DMD (which uses variable projection) on a synthetic signal 
+
 %% generate data if requested, otherwise load it
 
 generate_data = false;  % set to true to generate data, false to load it from file
